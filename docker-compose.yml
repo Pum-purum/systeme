@@ -1,0 +1,47 @@
+version: "3.4"
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    environment:
+      TZ: $TZ
+    restart: unless-stopped
+    depends_on:
+      - php
+    ports:
+      - $PORT:80
+    volumes:
+      - php_socket:/var/run/php
+      - "./volumes/logs/nginx:/var/log/nginx"
+      - "./code:/var/www/site"
+    networks:
+      - default
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - php_socket:/var/run/php
+      - ./code/:/var/www/site
+  db:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    expose:
+      - "5432"
+    ports:
+      - 127.0.0.1:$DB_PORT:5432
+    volumes:
+      - "./volumes/postgresql/data:/var/lib/postgresql/data/pgdata"
+    restart: unless-stopped
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: $DB_NAME
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASS
+volumes:
+  php_socket:
+    driver: local

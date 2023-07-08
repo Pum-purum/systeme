@@ -1,0 +1,5 @@
+api_client:
+  resource: "../src/Controller/*"
+  name_prefix: api_
+  prefix: /api
+  type: annotation

@@ -1,0 +1,29 @@
+doctrine:
+    dbal:
+        # configure these for your database server
+        driver: 'pdo_pgsql'
+        charset: utf8
+        default_table_options:
+            charset: utf8mb4
+            collate: utf8mb4_unicode_ci
+
+        url: '%env(resolve:DATABASE_URL)%'
+        mapping_types:
+            # Needed for int_array, string_array. See https://stackoverflow.com/a/51808192
+            _int4: string
+            _text: string
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        server_version: '13'
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+          # APP
+          App\Domain\Shop:
+            is_bundle: false
+            type: attribute
+            dir: '%kernel.project_dir%/src/Domain/Shop/'
+            prefix: 'App\Domain\Shop\Entity'
