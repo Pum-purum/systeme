@@ -9,7 +9,7 @@
 
 Сбилдить контейнеры:
 ```bash
-docker-compose build
+make build
 ```
 
 Запустить проект:
@@ -24,7 +24,7 @@ make sh
 ```bash
 composer install
 ```
-Создать и заполнить данными базу данных:
+Создать базу данных:
 ```bash
 bin/recreate 
 ```
